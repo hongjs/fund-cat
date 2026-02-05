@@ -1,0 +1,86 @@
+{
+  "common": {
+    "appName": "Fund Cat",
+    "search": "Search",
+    "filter": "Filter",
+    "compare": "Compare",
+    "favorites": "Favorites",
+    "recent": "Recent",
+    "loading": "Loading...",
+    "error": "Error occurred",
+    "noData": "No data found",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "nav": {
+    "home": "Home",
+    "funds": "Funds",
+    "compare": "Compare",
+    "favorites": "Favorites",
+    "recent": "Recent"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "toggle": "Toggle Theme"
+  },
+  "language": {
+    "th": "ไทย",
+    "en": "English",
+    "switch": "Switch Language"
+  },
+  "fund": {
+    "name": "Fund Name",
+    "abbr": "Abbreviation",
+    "type": "Type",
+    "nav": "NAV",
+    "change": "Change",
+    "performance": "Performance",
+    "risk": "Risk",
+    "fee": "Fee",
+    "benchmark": "Benchmark",
+    "details": "Details",
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites",
+    "addToCompare": "Add to Compare",
+    "viewDetails": "View Details",
+    "searchPlaceholder": "Search funds by name or abbreviation",
+    "noResults": "No funds found"
+  },
+  "chart": {
+    "title": "Historical Price Chart",
+    "period": {
+      "1M": "1 Month",
+      "3M": "3 Months",
+      "6M": "6 Months",
+      "1Y": "1 Year",
+      "ALL": "All"
+    }
+  },
+  "search": {
+    "placeholder": "Search funds by name or abbreviation",
+    "results": "Search Results",
+    "noResults": "No funds found"
+  },
+  "comparison": {
+    "title": "Compare Funds",
+    "selectFunds": "Select funds to compare",
+    "maxFunds": "Compare up to {max} funds",
+    "remove": "Remove",
+    "clear": "Clear All"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": "No favorite funds yet",
+    "addSome": "Add funds you're interested in for easy tracking"
+  },
+  "recent": {
+    "title": "Recently Viewed",
+    "empty": "No viewing history yet",
+    "description": "Funds you recently viewed will appear here"
+  }
+}
