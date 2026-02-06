@@ -3,7 +3,6 @@
 import React from 'react';
 import { Box, Button, Typography, Container } from '@mui/material';
 import { Error as ErrorIcon } from '@mui/icons-material';
-import { useTranslations } from 'next-intl';
 
 export default function Error({
   error,
@@ -12,8 +11,6 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const t = useTranslations();
-
   React.useEffect(() => {
     console.error('Error:', error);
   }, [error]);
@@ -33,7 +30,7 @@ export default function Error({
       >
         <ErrorIcon sx={{ fontSize: 80, color: 'error.main' }} />
         <Typography variant="h4" component="h1">
-          {t('common.error')}
+          Error
         </Typography>
         <Typography variant="body1" color="text.secondary">
           {error.message || 'Something went wrong'}

@@ -2,7 +2,7 @@ import { format as dateFnsFormat } from 'date-fns';
 import { th, enUS } from 'date-fns/locale';
 
 // Number formatting
-export const formatCurrency = (value: number, locale: 'th' | 'en' = 'th'): string => {
+export const formatCurrency = (value: number, locale: 'th' | 'en' = 'en'): string => {
   return new Intl.NumberFormat(locale === 'th' ? 'th-TH' : 'en-US', {
     style: 'currency',
     currency: 'THB',
@@ -11,14 +11,14 @@ export const formatCurrency = (value: number, locale: 'th' | 'en' = 'th'): strin
   }).format(value);
 };
 
-export const formatNumber = (value: number, locale: 'th' | 'en' = 'th', decimals: number = 2): string => {
+export const formatNumber = (value: number, locale: 'th' | 'en' = 'en', decimals: number = 2): string => {
   return new Intl.NumberFormat(locale === 'th' ? 'th-TH' : 'en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(value);
 };
 
-export const formatPercentage = (value: number, locale: 'th' | 'en' = 'th', decimals: number = 2): string => {
+export const formatPercentage = (value: number, locale: 'th' | 'en' = 'en', decimals: number = 2): string => {
   return new Intl.NumberFormat(locale === 'th' ? 'th-TH' : 'en-US', {
     style: 'percent',
     minimumFractionDigits: decimals,
@@ -26,7 +26,7 @@ export const formatPercentage = (value: number, locale: 'th' | 'en' = 'th', deci
   }).format(value / 100);
 };
 
-export const formatCompactNumber = (value: number, locale: 'th' | 'en' = 'th'): string => {
+export const formatCompactNumber = (value: number, locale: 'th' | 'en' = 'en'): string => {
   return new Intl.NumberFormat(locale === 'th' ? 'th-TH' : 'en-US', {
     notation: 'compact',
     compactDisplay: 'short',
@@ -34,7 +34,7 @@ export const formatCompactNumber = (value: number, locale: 'th' | 'en' = 'th'): 
 };
 
 // Date formatting
-export const formatDate = (date: string | Date, formatStr: string = 'dd/MM/yyyy', locale: 'th' | 'en' = 'th'): string => {
+export const formatDate = (date: string | Date, formatStr: string = 'dd/MM/yyyy', locale: 'th' | 'en' = 'en'): string => {
   try {
     const dateObj = typeof date === 'string' ? new Date(date) : date;
     return dateFnsFormat(dateObj, formatStr, {
@@ -46,11 +46,11 @@ export const formatDate = (date: string | Date, formatStr: string = 'dd/MM/yyyy'
   }
 };
 
-export const formatDateTime = (date: string | Date, locale: 'th' | 'en' = 'th'): string => {
+export const formatDateTime = (date: string | Date, locale: 'th' | 'en' = 'en'): string => {
   return formatDate(date, 'dd/MM/yyyy HH:mm', locale);
 };
 
-export const formatRelativeTime = (date: string | Date, locale: 'th' | 'en' = 'th'): string => {
+export const formatRelativeTime = (date: string | Date, locale: 'th' | 'en' = 'en'): string => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
@@ -97,7 +97,7 @@ export const formatNavChange = (current: number, previous: number): {
 export const formatNavChangeDisplay = (
   current: number,
   previous: number,
-  locale: 'th' | 'en' = 'th'
+  locale: 'th' | 'en' = 'en'
 ): string => {
   const { value, percentage, isPositive } = formatNavChange(current, previous);
   const sign = isPositive ? '+' : '';

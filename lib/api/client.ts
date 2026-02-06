@@ -1,57 +1,75 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+/**
+ * API client utilities using native fetch
+ * These clients point to our internal API routes which proxy to SEC API
+ */
 
-// Create axios instance for Fund Daily Info API
-export const fundDailyClient: AxiosInstance = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_SEC_FUND_DAILY_BASE_URL || 'https://api.sec.or.th/FundDailyInfo',
-  headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache',
-    'Ocp-Apim-Subscription-Key': process.env.NEXT_PUBLIC_SEC_FUND_DAILY_API_KEY || '',
-  },
-});
+interface FetchOptions extends RequestInit {
+  baseURL?: string;
+}
 
-// Create axios instance for Fund Factsheet API
-export const fundFactsheetClient: AxiosInstance = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_SEC_FUND_FACTSHEET_BASE_URL || 'https://api.sec.or.th/FundFactsheet',
-  headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache',
-    'Ocp-Apim-Subscription-Key': process.env.NEXT_PUBLIC_SEC_FUND_FACTSHEET_API_KEY || '',
-  },
-});
+interface ApiResponse<T> {
+  data?: T;
+  status: number;
+}
 
-// Request interceptor
-const requestInterceptor = (config: any) => {
-  // You can add custom logic here (e.g., logging, adding tokens)
-  return config;
+const defaultHeaders = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-cache',
 };
 
-// Response interceptor
-const responseInterceptor = (response: any) => {
-  return response;
-};
+/**
+ * Generic fetch wrapper for API calls
+ */
+async function apiFetch<T>(
+  url: string,
+  baseURL: string,
+  options: FetchOptions = {}
+): Promise<ApiResponse<T>> {
+  try {
+    const origin = typeof window === 'undefined' ? 'http://localhost:3000' : window.location.origin;
+    const fullUrl = `${origin}${baseURL}${url}`;
 
-// Error interceptor
-const errorInterceptor = (error: AxiosError) => {
-  if (error.response) {
-    // Server responded with error status
-    console.error('API Error:', error.response.status, error.response.data);
-  } else if (error.request) {
-    // Request was made but no response received
-    console.error('Network Error:', error.message);
-  } else {
-    // Something else happened
-    console.error('Error:', error.message);
+    const response = await fetch(fullUrl, {
+      ...options,
+      headers: {
+        ...defaultHeaders,
+        ...(options.headers || {}),
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      console.error(`API Error: ${response.status}`, data);
+    }
+
+    return { data, status: response.status };
+  } catch (error) {
+    console.error('Network Error:', error);
+    throw error;
   }
-  return Promise.reject(error);
+}
+
+/**
+ * Fund Daily Info API client
+ */
+export const fundDailyClient = {
+  get: async <T,>(path: string) => {
+    return apiFetch<T>(path, '/api/fund-daily', {
+      method: 'GET',
+    });
+  },
 };
 
-// Add interceptors to both clients
-[fundDailyClient, fundFactsheetClient].forEach((client) => {
-  client.interceptors.request.use(requestInterceptor, errorInterceptor);
-  client.interceptors.response.use(responseInterceptor, errorInterceptor);
-});
+/**
+ * Fund Factsheet API client
+ */
+export const fundFactsheetClient = {
+  get: async <T,>(path: string) => {
+    return apiFetch<T>(path, '/api/fund-factsheet', {
+      method: 'GET',
+    });
+  },
+};
 
 export default { fundDailyClient, fundFactsheetClient };

@@ -18,32 +18,27 @@ import {
 import {
   Brightness4 as DarkModeIcon,
   Brightness7 as LightModeIcon,
-  Language as LanguageIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
 import { useThemeMode } from '@/contexts/ThemeContext';
-import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 const pages = [
-  { key: 'home', href: '' },
-  { key: 'funds', href: '/funds' },
-  { key: 'compare', href: '/compare' },
-  { key: 'favorites', href: '/favorites' },
-  { key: 'recent', href: '/recent' },
+  { label: 'Home', href: '' },
+  { label: 'Funds', href: '/funds' },
+  { label: 'Compare', href: '/compare' },
+  { label: 'Favorites', href: '/favorites' },
+  { label: 'Recent', href: '/recent' },
 ];
 
 export default function Header() {
-  const t = useTranslations();
-  const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const theme = useTheme();
   const { mode, toggleTheme } = useThemeMode();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElLang, setAnchorElLang] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -53,23 +48,8 @@ export default function Header() {
     setAnchorElNav(null);
   };
 
-  const handleOpenLangMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElLang(event.currentTarget);
-  };
-
-  const handleCloseLangMenu = () => {
-    setAnchorElLang(null);
-  };
-
-  const switchLocale = (newLocale: string) => {
-    const currentPath = pathname.replace(`/${locale}`, '');
-    router.push(`/${newLocale}${currentPath}`);
-    handleCloseLangMenu();
-  };
-
   const isActivePath = (href: string) => {
-    const fullPath = `/${locale}${href}`;
-    return pathname === fullPath || (href !== '' && pathname.startsWith(fullPath));
+    return pathname === href || (href !== '' && pathname.startsWith(href));
   };
 
   return (
@@ -87,7 +67,7 @@ export default function Header() {
           {/* Logo - Desktop */}
           <Box
             component={Link}
-            href={`/${locale}`}
+            href="/"
             sx={{
               mr: 4,
               display: { xs: 'none', md: 'flex' },
@@ -127,7 +107,7 @@ export default function Header() {
                 letterSpacing: -0.5,
               }}
             >
-              {t('common.appName')}
+              Fund Cat
             </Typography>
           </Box>
 
@@ -163,13 +143,13 @@ export default function Header() {
             >
               {pages.map((page) => (
                 <MenuItem
-                  key={page.key}
+                  key={page.label}
                   onClick={handleCloseNavMenu}
                   component={Link}
-                  href={`/${locale}${page.href}`}
+                  href={page.href}
                   selected={isActivePath(page.href)}
                 >
-                  <Typography textAlign="center">{t(`nav.${page.key}`)}</Typography>
+                  <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -178,7 +158,7 @@ export default function Header() {
           {/* Logo - Mobile */}
           <Box
             component={Link}
-            href={`/${locale}`}
+            href="/"
             sx={{
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
@@ -218,7 +198,7 @@ export default function Header() {
                 fontSize: '1.125rem',
               }}
             >
-              {t('common.appName')}
+              Fund Cat
             </Typography>
           </Box>
 
@@ -230,9 +210,9 @@ export default function Header() {
           >
             {pages.map((page) => (
               <Button
-                key={page.key}
+                key={page.label}
                 component={Link}
-                href={`/${locale}${page.href}`}
+                href={page.href}
                 sx={{
                   color: 'text.primary',
                   fontWeight: 600,
@@ -249,7 +229,7 @@ export default function Header() {
                   },
                 }}
               >
-                {t(`nav.${page.key}`)}
+                {page.label}
               </Button>
             ))}
           </Stack>
@@ -263,49 +243,10 @@ export default function Header() {
                 width: 40,
                 height: 40,
               }}
-              aria-label={t('theme.toggle')}
+              aria-label="Toggle theme"
             >
               {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
-
-            <IconButton
-              onClick={handleOpenLangMenu}
-              sx={{
-                color: 'text.primary',
-                width: 40,
-                height: 40,
-              }}
-              aria-label={t('language.switch')}
-            >
-              <LanguageIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElLang}
-              open={Boolean(anchorElLang)}
-              onClose={handleCloseLangMenu}
-              PaperProps={{
-                sx: {
-                  mt: 1.5,
-                  borderRadius: 2,
-                  minWidth: 120,
-                },
-              }}
-            >
-              <MenuItem
-                onClick={() => switchLocale('th')}
-                selected={locale === 'th'}
-                sx={{ borderRadius: 1, mx: 1 }}
-              >
-                {t('language.th')}
-              </MenuItem>
-              <MenuItem
-                onClick={() => switchLocale('en')}
-                selected={locale === 'en'}
-                sx={{ borderRadius: 1, mx: 1 }}
-              >
-                {t('language.en')}
-              </MenuItem>
-            </Menu>
           </Stack>
         </Toolbar>
       </Container>

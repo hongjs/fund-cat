@@ -1,41 +1,10 @@
-'use client';
-
-import { Suspense } from 'react';
 import { Container, Typography, Box, Stack, alpha, Button } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import AppLayout from '@/components/layout/AppLayout';
 import FundSearch from '@/components/fund/FundSearch';
-import { FundListSkeleton } from '@/components/common/Skeletons';
 import Link from 'next/link';
 import { TrendingUp, CompareArrows, Star } from '@mui/icons-material';
-import { useParams, useRouter } from 'next/navigation';
-
-// This will be a Server Component that fetches data
-function FeaturedFunds() {
-  // TODO: Fetch featured funds from API
-  // For now, return placeholder
-  return (
-    <Box sx={{ mt: 6 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
-        Featured Funds
-      </Typography>
-      <Typography color="text.secondary" sx={{ mb: 4 }}>
-        Fund list will be displayed here
-      </Typography>
-    </Box>
-  );
-}
 
 export default function HomePage() {
-  const t = useTranslations();
-  const params = useParams();
-  const router = useRouter();
-  const locale = params.locale as string;
-
-  const handleSelectFund = (projId: string) => {
-    router.push(`/${locale}/funds/${projId}`);
-  };
-
   return (
     <AppLayout>
       {/* Hero Section */}
@@ -65,7 +34,7 @@ export default function HomePage() {
                 mb: 2,
               }}
             >
-              {t('common.appName')}
+              Fund Cat
             </Typography>
             <Typography
               variant="h5"
@@ -78,7 +47,7 @@ export default function HomePage() {
 
             {/* Search Box */}
             <Box sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
-              <FundSearch onSelectFund={handleSelectFund} />
+              <FundSearch />
             </Box>
 
             <Stack
@@ -88,7 +57,7 @@ export default function HomePage() {
             >
               <Button
                 component={Link}
-                href={`/${locale}/funds`}
+                href="/funds"
                 variant="contained"
                 size="large"
                 startIcon={<TrendingUp />}
@@ -106,7 +75,7 @@ export default function HomePage() {
               </Button>
               <Button
                 component={Link}
-                href={`/${locale}/compare`}
+                href="/compare"
                 variant="outlined"
                 size="large"
                 startIcon={<CompareArrows />}
@@ -189,10 +158,6 @@ export default function HomePage() {
           </Box>
         </Stack>
 
-        {/* Using Suspense for streaming */}
-        <Suspense fallback={<FundListSkeleton count={6} />}>
-          <FeaturedFunds />
-        </Suspense>
       </Container>
     </AppLayout>
   );

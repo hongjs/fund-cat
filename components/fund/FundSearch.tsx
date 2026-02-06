@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   TextField,
   InputAdornment,
@@ -15,20 +16,17 @@ import {
   alpha,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import { useTranslations } from 'next-intl';
 
 interface FundSearchProps {
-  onSelectFund?: (projId: string) => void;
   placeholder?: string;
   fullWidth?: boolean;
 }
 
 export default function FundSearch({
-  onSelectFund,
   placeholder,
   fullWidth = true,
 }: FundSearchProps) {
-  const t = useTranslations();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -47,37 +45,14 @@ export default function FundSearch({
     setShowResults(true);
 
     try {
-      // TODO: Call API to search funds
-      // For now, mock data
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
       
-      const mockResults = [
-        {
-          proj_id: '1',
-          proj_abbr_name: 'SCB-EQUITY',
-          proj_name_th: 'กองทุนเปิดไทยพาณิชย์หุ้นระยะยาว',
-          proj_name_en: 'SCB Equity Long Term Fund',
-        },
-        {
-          proj_id: '2',
-          proj_abbr_name: 'K-CHINA-A(A)',
-          proj_name_th: 'กองทุนเปิดกสิกรหุ้นจีน',
-          proj_name_en: 'Kasikorn China Equity Fund',
-        },
-        {
-          proj_id: '3',
-          proj_abbr_name: 'BBL-EQUITY',
-          proj_name_th: 'กองทุนเปิดบัวหลวงหุ้นระยะยาว',
-          proj_name_en: 'BBL Equity Long Term Fund',
-        },
-      ].filter(
-        (fund) =>
-          fund.proj_abbr_name.toLowerCase().includes(query.toLowerCase()) ||
-          fund.proj_name_th.includes(query) ||
-          fund.proj_name_en.toLowerCase().includes(query.toLowerCase())
-      );
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
 
-      setSearchResults(mockResults);
+      const data = await response.json();
+      setSearchResults(data.results || []);
     } catch (error) {
       console.error('Search error:', error);
       setSearchResults([]);
@@ -89,16 +64,14 @@ export default function FundSearch({
   const handleSelectFund = (projId: string) => {
     setShowResults(false);
     setSearchQuery('');
-    if (onSelectFund) {
-      onSelectFund(projId);
-    }
+    router.push(`/funds/${projId}`);
   };
 
   return (
     <Box sx={{ position: 'relative', width: fullWidth ? '100%' : 'auto' }}>
       <TextField
         fullWidth={fullWidth}
-        placeholder={placeholder || t('fund.searchPlaceholder')}
+        placeholder={placeholder || 'Search funds...'}
         value={searchQuery}
         onChange={(e) => handleSearch(e.target.value)}
         onFocus={() => searchResults.length > 0 && setShowResults(true)}
@@ -165,7 +138,7 @@ export default function FundSearch({
                     }
                     secondary={
                       <Typography variant="body2" color="text.secondary" noWrap>
-                        {fund.proj_name_th}
+                        {fund.proj_name_en}
                       </Typography>
                     }
                   />
@@ -192,7 +165,7 @@ export default function FundSearch({
           }}
         >
           <Typography variant="body2" color="text.secondary">
-            {t('fund.noResults')}
+            No funds found
           </Typography>
         </Paper>
       )}

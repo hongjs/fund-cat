@@ -2,10 +2,8 @@
 
 import React from 'react';
 import { Box, Container, Typography, Link as MuiLink, Stack, Divider, alpha } from '@mui/material';
-import { useTranslations } from 'next-intl';
 
 export default function Footer() {
-  const t = useTranslations();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -29,7 +27,7 @@ export default function Footer() {
           >
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
-                {t('common.appName')}
+                Fund Cat
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Compare and analyze mutual funds in Thailand
@@ -58,7 +56,7 @@ export default function Footer() {
           <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Typography variant="body2" color="text.secondary" align="center">
-            © {currentYear} {t('common.appName')}. All rights reserved.
+            © {currentYear} Fund Cat. All rights reserved.
           </Typography>
         </Stack>
       </Container>
